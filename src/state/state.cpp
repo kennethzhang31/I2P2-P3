@@ -11,9 +11,20 @@
  * 
  * @return int 
  */
+
 int State::evaluate(){
-  // [TODO] design your own evaluation function
-  return 0;
+  // [TODO] design your own evaluation functions
+  int first_values = 0;
+  int second_values = 0;
+  for (int h = 0; h < BOARD_H; h++){
+    for (int w = 0; w < BOARD_W; w++){
+      int first_index = this->board.board[this->player][h][w];
+      int second_index = this->board.board[this->player ^ 1][h][w];
+      first_values += piece_values[first_index];
+      second_values += piece_values[second_index];
+    }
+  }
+  return first_values - second_values;
 }
 
 

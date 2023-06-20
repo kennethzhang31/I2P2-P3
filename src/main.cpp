@@ -303,11 +303,11 @@ std::string State::encode_output(){
     for(int j=0; j<BOARD_W; j+=1){
       ss << "│ ";
       if((now_piece = this->board.board[0][i][j])){
-        ss << std::string(PIECE_TABLE[0][now_piece]) << " ";
+        ss << std::string(piece_table[0][now_piece]) << " ";
       }else if((now_piece = this->board.board[1][i][j])){
-        ss << std::string(PIECE_TABLE[1][now_piece]) << " ";
+        ss << std::string(piece_table[1][now_piece]) << " ";
       }else{
-        ss << std::string(PIECE_TABLE[0][0]) << " ";
+        ss << std::string(piece_table[0][0]) << " ";
       }
     }
     ss << "│ │ " << y_axis[i] << " │\n";
@@ -449,8 +449,9 @@ int main(int argc, char** argv) {
     }
     fin.close();
 
-    if (remove(file_action.c_str()) != 0)
-      std::cerr << "Error removing file: " << file_action << "\n";
+    // if (remove(file_action.c_str()) != 0) {
+    //     std::cerr << "Error removing file: " << file_action << "\n";
+    // }
     // Take action
     if (!valid_move(action, game.legal_actions)){
       // If action is invalid.
@@ -518,7 +519,7 @@ int main(int argc, char** argv) {
   
   log.close();
   // Reset state file
-  if (remove(file_state.c_str()) != 0)
-    std::cerr << "Error removing file: " << file_state << "\n";
+  // if (remove(file_state.c_str()) != 0)
+  //  std::cerr << "Error removing file: " << file_state << "\n";
   return 0;
 }

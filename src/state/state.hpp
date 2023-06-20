@@ -43,6 +43,8 @@ enum GameState {
 class State{
   public:
     //You may want to add more property for a state
+	  int piece_values[7] = {0, 50, 150, 250, 330, 500, 50000};
+
     GameState game_state = UNKNOWN;
     Board board;
     int player = 0;
