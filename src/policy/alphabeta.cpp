@@ -1,8 +1,8 @@
-#include "minimax.hpp"
+#include "alphabeta.hpp"
 
 #define inf 2147483646
 
-Move minimax::get_move(State* state, int depth){
+Move alphabeta::get_move(State* state, int depth){
     if (!state->legal_actions.size()) state->get_legal_actions();
     auto moves = state->legal_actions;
     Move best_move = moves[0];
@@ -11,7 +11,7 @@ Move minimax::get_move(State* state, int depth){
         int max = -1 * inf;
         for (auto mv : moves){
             State* next = state->next_state(mv);
-            int val = make_node(next, depth, false);
+            int val = make_node(next, depth - 1, -1 * inf, inf);
             if (val > max){
                 best_move = mv;
                 max = val;
@@ -19,26 +19,28 @@ Move minimax::get_move(State* state, int depth){
         }
     }
     else{
-        int max = inf;
+        int min = inf;
         for (auto mv : moves){
             State* next = state->next_state(mv);
-            int val = make_node(next, depth, false);
-            if (val < max){
+            int val = make_node(next, depth - 1, -1 * inf, inf);
+            if (val < min){
                 best_move = mv;
-                max = val;
+                min = val;
             }
         }
     }
     return best_move;
 }
 
-int minimax::make_node(State* state, int depth, bool maximize){
+int alphabeta::make_node(State* state, int depth, int alpha, int beta){
     if (state->game_state == WIN){
         if (state->player == 0) return inf;
         else return -1 * inf;
     }
-    if (depth == 0 || state->game_state == DRAW) return state->evaluate();
-
+    if (depth == 0 || state->game_state == DRAW){
+        return state->evaluate();
+    }
+    
     if (!state->legal_actions.size()){
         state->get_legal_actions();
     }
@@ -50,8 +52,10 @@ int minimax::make_node(State* state, int depth, bool maximize){
         int max = -1 * inf;
         for (auto move : state->legal_actions){
             State* next = state->next_state(move);
-            int val = make_node(next, depth - 1, true);
+            int val = make_node(next, depth - 1, alpha, beta);
             max = std::max(max, val);
+            alpha = std::max(alpha, max);
+            if (beta <= alpha) break;
         }
         return max;
     }
@@ -59,8 +63,10 @@ int minimax::make_node(State* state, int depth, bool maximize){
         int min = inf;
         for (auto move : state->legal_actions){
             State* next = state->next_state(move);
-            int val = make_node(next, depth - 1, true);
+            int val = make_node(next, depth - 1, alpha, beta);
             min = std::min(min, val);
+            beta = std::min(beta, min);
+            if (beta <= alpha) break;
         }
         return min;
     }
