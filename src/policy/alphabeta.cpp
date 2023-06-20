@@ -1,6 +1,5 @@
 #include "alphabeta.hpp"
-
-#define inf 2147483646
+#define inf 2147480000
 
 Move alphabeta::get_move(State* state, int depth){
     if (!state->legal_actions.size()) state->get_legal_actions();
@@ -8,10 +7,10 @@ Move alphabeta::get_move(State* state, int depth){
     Move best_move = moves[0];
     
     if (state->player == 0){
-        int max = -1 * inf;
+        int max = -inf;
         for (auto mv : moves){
             State* next = state->next_state(mv);
-            int val = make_node(next, depth - 1, -1 * inf, inf);
+            int val = make_node(next, depth - 1, -inf, inf);
             if (val > max){
                 best_move = mv;
                 max = val;
@@ -22,7 +21,7 @@ Move alphabeta::get_move(State* state, int depth){
         int min = inf;
         for (auto mv : moves){
             State* next = state->next_state(mv);
-            int val = make_node(next, depth - 1, -1 * inf, inf);
+            int val = make_node(next, depth - 1, -inf, inf);
             if (val < min){
                 best_move = mv;
                 min = val;
@@ -35,7 +34,7 @@ Move alphabeta::get_move(State* state, int depth){
 int alphabeta::make_node(State* state, int depth, int alpha, int beta){
     if (state->game_state == WIN){
         if (state->player == 0) return inf;
-        else return -1 * inf;
+        else return -inf;
     }
     if (depth == 0 || state->game_state == DRAW){
         return state->evaluate();
@@ -49,7 +48,7 @@ int alphabeta::make_node(State* state, int depth, int alpha, int beta){
     }
 
     if (state->player == 0){
-        int max = -1 * inf;
+        int max = -inf;
         for (auto move : state->legal_actions){
             State* next = state->next_state(move);
             int val = make_node(next, depth - 1, alpha, beta);
