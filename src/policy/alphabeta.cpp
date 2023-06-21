@@ -1,6 +1,8 @@
 #include "alphabeta.hpp"
 #define inf 2147480000
 
+
+//get best move by comparing return values;
 Move alphabeta::get_move(State* state, int depth){
     if (!state->legal_actions.size()) state->get_legal_actions();
     auto moves = state->legal_actions;
@@ -30,7 +32,7 @@ Move alphabeta::get_move(State* state, int depth){
     }
     return best_move;
 }
-
+//get values from each state;
 int alphabeta::make_node(State* state, int depth, int alpha, int beta){
     if (state->game_state == WIN){
         if (state->player == 0) return inf;
